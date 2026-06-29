@@ -17,7 +17,7 @@ export const uploadImage = async (imageFile) => {
 
   console.log("IMAGE UPLOAD RESPONSE");
 
-  console.log(data);
+//   console.log(data);
 
   if (!data.success) {
     throw new Error("Image upload failed");

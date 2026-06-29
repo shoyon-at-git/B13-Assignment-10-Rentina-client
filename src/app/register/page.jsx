@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import { FaGoogle, FaUser } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -12,9 +13,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadImage } from "@/actions/uploadImage";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
-    const handleRegister = async (e) => {
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    async function handleRegister(e) {
         e.preventDefault();
 
         const formData = new FormData(e.target);
@@ -27,19 +33,73 @@ export default function RegisterPage() {
             role: formData.get("role"),
             plan: "basic",
         };
+        if (userData.password.length < 6) {
+            toast.error("Password must be at least 6 characters.");
+            return;
+        }
 
-        // console.log(userData);
+        if (!/[A-Z]/.test(userData.password)) {
+            toast.error("Password must contain one uppercase letter.");
+            return;
+        }
+
+        if (!/[a-z]/.test(userData.password)) {
+            toast.error("Password must contain one lowercase letter.");
+            return;
+        }
+
+        console.log("REGISTER REQUEST", userData);
+
         try {
-            const imageUrl = await uploadImage(userData.image);
+            setLoading(true);
 
-            userData.image = imageUrl;
-            console.log(userData);
+            const imageUrl = await uploadImage(userData.image);
+            if (!imageUrl) {
+                toast.error("Image upload failed.");
+                return;
+            }
+
+            const result = await authClient.signUp.email({
+                ...userData,
+                image: imageUrl,
+            });
+
+            console.log("REGISTER RESPONSE", result);
+
+            if (!result.data) {
+                toast.error("Registration failed.");
+                return;
+            }
+
+            console.log("Registration Successful");
+            await authClient.signOut();
+
+            toast.success("Account created successfully. Please login.");
+
+            e.target.reset();
+            router.refresh();
+            router.push("/login");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleGoogleLogin() {
+        try {
+            console.log("GOOGLE LOGIN REQUEST");
+
+            const result = await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/",
+            });
+
+            console.log("GOOGLE LOGIN RESPONSE", result);
         } catch (error) {
             console.error(error);
         }
-        console.log(userData);
-        
-    };
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4 py-10">
@@ -91,12 +151,6 @@ export default function RegisterPage() {
                             <Label htmlFor="image">Profile Photo</Label>
 
                             <Input id="image" name="image" type="file" accept="image/*" required />
-
-                            <div className="flex justify-center">
-                                <div className="w-24 h-24 rounded-full border-2 border-dashed flex items-center justify-center text-xs text-muted-foreground">
-                                    Preview
-                                </div>
-                            </div>
                         </div>
 
                         {/* Password */}
@@ -136,8 +190,8 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        <Button type="submit" className="w-full">
-                            Create Account
+                        <Button type="submit" disabled={loading} className="w-full">
+                            {loading ? "Creating Account..." : "Create Account"}
                         </Button>
 
                         <div className="relative">
@@ -150,7 +204,12 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        <Button type="button" variant="outline" className="w-full">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full flex items-center gap-2"
+                            onClick={handleGoogleLogin}
+                        >
                             <FaGoogle />
                             Sign up with Google
                         </Button>

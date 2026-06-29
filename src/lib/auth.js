@@ -11,9 +11,32 @@ export const auth = betterAuth({
     enabled: true,
   },
 
-  secret: process.env.BETTER_AUTH_SECRET,
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+  },
 
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        input: true,
+        defaultValue: "tenant",
+      },
+      plan: {
+        type: "string",
+        input: true,
+        defaultValue: "basic",
+      },
+    },
+  },
+
+  secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
 
-  trustedOrigins: [process.env.NEXT_PUBLIC_SERVER_URL],
+  trustedOrigins: [
+    process.env.NEXT_PUBLIC_SERVER_URL,
+  ],
 });
