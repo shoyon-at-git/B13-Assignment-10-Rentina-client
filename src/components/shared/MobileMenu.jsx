@@ -53,7 +53,7 @@ export default function MobileMenu({ session }) {
                     <SheetTitle>Rentina</SheetTitle>
                 </SheetHeader>
 
-                <div className="mt-8 flex flex-col gap-5">
+                <div className="mt-8 flex flex-col gap-5 border pl-4">
 
                     <Link href="/">
                         Home

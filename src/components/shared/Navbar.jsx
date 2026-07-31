@@ -10,9 +10,15 @@ import UserMenu from "./UserMenu";
 import MobileMenu from "./MobileMenu";
 
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     const { data: session, isPending } = authClient.useSession();
+    const pathname = usePathname();
+
+    if (pathname.startsWith("/dashboard")) {
+        return null;
+    }
 
     if (isPending) {
         return (
