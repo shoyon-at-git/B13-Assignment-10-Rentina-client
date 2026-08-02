@@ -18,11 +18,14 @@ import {
 } from "react-icons/fa";
 
 import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 
 export default function UserDropdown({ user }) {
-
+    const router = useRouter();
     const handleLogout = async () => {
         await authClient.signOut();
+        router.push("/");
     };
 
     return (
@@ -45,7 +48,7 @@ export default function UserDropdown({ user }) {
                     <div className="hidden text-left md:block">
 
                         <h4 className="font-medium">
-                            {user?.name}
+                            Hi, {user?.name}
                         </h4>
 
                         <p className="text-sm text-gray-500">
