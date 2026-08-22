@@ -40,7 +40,7 @@ export const ownerMenu = [
     },
     {
         label: "My Properties",
-        href: "/dashboard/owner/properties",
+        href: "/dashboard/owner/my-properties",
         icon: FaBuilding,
     },
     {

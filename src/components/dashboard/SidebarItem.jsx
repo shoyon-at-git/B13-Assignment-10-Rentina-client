@@ -8,12 +8,9 @@ export default function SidebarItem({
     icon: Icon,
     label,
 }) {
-
     const pathname = usePathname();
 
-    const isActive =
-        pathname === href ||
-        pathname.startsWith(`${href}/`);
+    const isActive = pathname === href;
 
     return (
         <Link
@@ -24,13 +21,11 @@ export default function SidebarItem({
                     : "text-gray-600 hover:bg-slate-100 hover:text-blue-600"
             }`}
         >
-
             <Icon className="text-lg" />
 
             <span className="font-medium">
                 {label}
             </span>
-
         </Link>
     );
 }
