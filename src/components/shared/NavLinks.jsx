@@ -11,7 +11,7 @@ export default function NavLinks() {
             </Link>
 
             <Link
-                href="/apartments"
+                href="/dashboard/properties"
                 className="font-medium hover:text-primary transition"
             >
                 All Properties

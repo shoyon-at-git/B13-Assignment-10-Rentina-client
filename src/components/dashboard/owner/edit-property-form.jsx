@@ -6,13 +6,7 @@ import { toast } from "react-toastify";
 
 import { uploadImage } from "@/actions/uploadImage";
 
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +55,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                 title: formData.get("title")?.trim(),
                 location: formData.get("location")?.trim(),
                 city: formData.get("city")?.trim(),
-
+                propertyType: formData.get("propertyType"),
                 rent: Number(formData.get("rent")),
                 bedrooms: Number(formData.get("bedrooms")),
                 bathrooms: Number(formData.get("bathrooms")),
@@ -122,25 +116,20 @@ export default function EditPropertyForm({ property, ownerId }) {
             // Express PUT API
             // =========================
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties/${property._id}`,
-                {
-                    method: "PUT",
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties/${property._id}`, {
+                method: "PUT",
 
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                headers: {
+                    "Content-Type": "application/json",
+                },
 
-                    body: JSON.stringify(propertyData),
-                }
-            );
+                body: JSON.stringify(propertyData),
+            });
 
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                toast.error(
-                    result.message || "Failed to update property."
-                );
+                toast.error(result.message || "Failed to update property.");
 
                 return;
             }
@@ -151,9 +140,7 @@ export default function EditPropertyForm({ property, ownerId }) {
 
             toast.success(result.message);
 
-            router.push(
-                `/dashboard/owner/my-properties/${property._id}`
-            );
+            router.push(`/dashboard/owner/my-properties/${property._id}`);
 
             router.refresh();
         } catch (error) {
@@ -168,32 +155,19 @@ export default function EditPropertyForm({ property, ownerId }) {
     return (
         <div className="mx-auto max-w-3xl py-8">
             <Card className="shadow-lg">
-
                 <CardHeader>
-                    <CardTitle className="text-3xl font-bold">
-                        Update Property
-                    </CardTitle>
+                    <CardTitle className="text-3xl font-bold">Update Property</CardTitle>
 
-                    <CardDescription>
-                        Update your rental property information.
-                    </CardDescription>
+                    <CardDescription>Update your rental property information.</CardDescription>
                 </CardHeader>
 
                 <CardContent>
-
                     <form onSubmit={handleSubmit}>
-
-                        <fieldset
-                            disabled={loading}
-                            className="space-y-5"
-                        >
-
+                        <fieldset disabled={loading} className="space-y-5">
                             {/* Title */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="title">
-                                    Property Title
-                                </Label>
+                                <Label htmlFor="title">Property Title</Label>
 
                                 <Input
                                     id="title"
@@ -207,9 +181,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                             {/* Location */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="location">
-                                    Location
-                                </Label>
+                                <Label htmlFor="location">Location</Label>
 
                                 <Input
                                     id="location"
@@ -223,9 +195,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                             {/* City */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="city">
-                                    City
-                                </Label>
+                                <Label htmlFor="city">City</Label>
 
                                 <Input
                                     id="city"
@@ -235,17 +205,37 @@ export default function EditPropertyForm({ property, ownerId }) {
                                     required
                                 />
                             </div>
+                            {/* Property Type */}
+
+                            <div className="space-y-2">
+                                <Label htmlFor="propertyType">Property Type</Label>
+
+                                <select
+                                    id="propertyType"
+                                    name="propertyType"
+                                    defaultValue={property.propertyType || ""}
+                                    required
+                                    className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                                >
+                                    <option value="">Select Property Type</option>
+
+                                    <option value="Apartment">Apartment</option>
+
+                                    <option value="House">House</option>
+
+                                    <option value="Room">Room</option>
+
+                                    <option value="Villa">Villa</option>
+                                </select>
+                            </div>
 
                             {/* Property Info */}
 
                             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
                                 {/* Rent */}
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="rent">
-                                        Monthly Rent (৳)
-                                    </Label>
+                                    <Label htmlFor="rent">Monthly Rent (৳)</Label>
 
                                     <Input
                                         id="rent"
@@ -260,9 +250,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                                 {/* Area */}
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="area">
-                                        Area (sq ft)
-                                    </Label>
+                                    <Label htmlFor="area">Area (sq ft)</Label>
 
                                     <Input
                                         id="area"
@@ -277,9 +265,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                                 {/* Bedrooms */}
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="bedrooms">
-                                        Bedrooms
-                                    </Label>
+                                    <Label htmlFor="bedrooms">Bedrooms</Label>
 
                                     <Input
                                         id="bedrooms"
@@ -294,9 +280,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                                 {/* Bathrooms */}
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="bathrooms">
-                                        Bathrooms
-                                    </Label>
+                                    <Label htmlFor="bathrooms">Bathrooms</Label>
 
                                     <Input
                                         id="bathrooms"
@@ -307,44 +291,31 @@ export default function EditPropertyForm({ property, ownerId }) {
                                         required
                                     />
                                 </div>
-
                             </div>
 
                             {/* Status */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="status">
-                                    Status
-                                </Label>
+                                <Label htmlFor="status">Status</Label>
 
                                 <select
                                     id="status"
                                     name="status"
-                                    defaultValue={
-                                        property.status || "available"
-                                    }
+                                    defaultValue={property.status || "available"}
                                     className="w-full rounded-md border bg-background px-3 py-2 text-sm"
                                 >
-                                    <option value="available">
-                                        Available
-                                    </option>
+                                    <option value="available">Available</option>
 
-                                    <option value="unavailable">
-                                        Unavailable
-                                    </option>
+                                    <option value="unavailable">Unavailable</option>
 
-                                    <option value="rented">
-                                        Rented
-                                    </option>
+                                    <option value="rented">Rented</option>
                                 </select>
                             </div>
 
                             {/* Description */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="description">
-                                    Description
-                                </Label>
+                                <Label htmlFor="description">Description</Label>
 
                                 <Textarea
                                     id="description"
@@ -360,50 +331,27 @@ export default function EditPropertyForm({ property, ownerId }) {
                             {/* Current Image */}
 
                             <div className="space-y-2">
-                                <Label>
-                                    Current Image
-                                </Label>
-
-                                
+                                <Label>Current Image</Label>
                             </div>
 
                             {/* New Image */}
 
                             <div className="space-y-2">
-                                <Label htmlFor="image">
-                                    Change Image
-                                </Label>
+                                <Label htmlFor="image">Change Image</Label>
 
-                                <Input
-                                    id="image"
-                                    name="image"
-                                    type="file"
-                                    accept="image/*"
-                                />
+                                <Input id="image" name="image" type="file" accept="image/*" />
 
-                                <p className="text-sm text-gray-500">
-                                    Leave empty to keep the current image.
-                                </p>
+                                <p className="text-sm text-gray-500">Leave empty to keep the current image.</p>
                             </div>
 
                             {/* Submit */}
 
-                            <Button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full"
-                            >
-                                {loading
-                                    ? "Updating Property..."
-                                    : "Update Property"}
+                            <Button type="submit" disabled={loading} className="w-full">
+                                {loading ? "Updating Property..." : "Update Property"}
                             </Button>
-
                         </fieldset>
-
                     </form>
-
                 </CardContent>
-
             </Card>
         </div>
     );

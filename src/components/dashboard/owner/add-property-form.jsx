@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 import { uploadImage } from "@/actions/uploadImage";
 
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
@@ -19,302 +19,345 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function AddPropertyForm({ ownerId }) {
-  const router = useRouter();
+export default function AddPropertyForm({
+    ownerId,
+    ownerName,
+    ownerEmail,
+}) {
+    const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    const form = e.target;
-    const formData = new FormData(form);
+        const form = e.target;
+        const formData = new FormData(form);
 
-    try {
-      setLoading(true);
+        try {
+            setLoading(true);
 
-      // =========================
-      // Image Validation
-      // =========================
+            // =========================
+            // Image Validation
+            // =========================
 
-      const image = formData.get("image");
+            const image = formData.get("image");
 
-      if (!image || image.size === 0) {
-        toast.error("Please select an image.");
-        return;
-      }
+            if (!image || image.size === 0) {
+                toast.error("Please select an image.");
+                return;
+            }
 
-      // =========================
-      // Upload Image
-      // =========================
+            // =========================
+            // Upload Image
+            // =========================
 
-      const imageUrl = await uploadImage(image);
+            const imageUrl = await uploadImage(image);
 
-      if (!imageUrl) {
-        toast.error("Image upload failed.");
-        return;
-      }
+            if (!imageUrl) {
+                toast.error("Image upload failed.");
+                return;
+            }
 
-      // =========================
-      // Property Data
-      // =========================
+            // =========================
+            // Property Data
+            // =========================
 
-      const propertyData = {
-        ownerId,
+            const propertyData = {
+                ownerId,
+                ownerName,
+                ownerEmail,
 
-        title: formData.get("title")?.trim(),
-        location: formData.get("location")?.trim(),
-        city: formData.get("city")?.trim(),
+                title: formData.get("title")?.trim(),
+                location: formData.get("location")?.trim(),
+                city: formData.get("city")?.trim(),
+                propertyType: formData.get("propertyType"),
 
-        rent: Number(formData.get("rent")),
-        bedrooms: Number(formData.get("bedrooms")),
-        bathrooms: Number(formData.get("bathrooms")),
-        area: Number(formData.get("area")),
+                rent: Number(formData.get("rent")),
+                bedrooms: Number(formData.get("bedrooms")),
+                bathrooms: Number(formData.get("bathrooms")),
+                area: Number(formData.get("area")),
 
-        description: formData.get("description")?.trim(),
+                description: formData.get("description")?.trim(),
 
-        image: imageUrl,
-      };
+                image: imageUrl,
+            };
 
-      // =========================
-      // Number Validation
-      // =========================
+            // =========================
+            // Number Validation
+            // =========================
 
-      if (propertyData.rent <= 0) {
-        toast.error("Rent must be greater than 0.");
-        return;
-      }
+            if (propertyData.rent <= 0) {
+                toast.error("Rent must be greater than 0.");
+                return;
+            }
 
-      if (propertyData.area <= 0) {
-        toast.error("Area must be greater than 0.");
-        return;
-      }
+            if (propertyData.area <= 0) {
+                toast.error("Area must be greater than 0.");
+                return;
+            }
 
-      if (propertyData.bedrooms <= 0) {
-        toast.error("Bedrooms must be greater than 0.");
-        return;
-      }
+            if (propertyData.bedrooms <= 0) {
+                toast.error("Bedrooms must be greater than 0.");
+                return;
+            }
 
-      if (propertyData.bathrooms <= 0) {
-        toast.error("Bathrooms must be greater than 0.");
-        return;
-      }
+            if (propertyData.bathrooms <= 0) {
+                toast.error("Bathrooms must be greater than 0.");
+                return;
+            }
 
-      // =========================
-      // Express API
-      // =========================
+            // =========================
+            // Express API
+            // =========================
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(propertyData),
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(propertyData),
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                toast.error(
+                    result.message || "Failed to add property."
+                );
+                return;
+            }
+
+            // =========================
+            // Success
+            // =========================
+
+            toast.success(result.message);
+
+            form.reset();
+
+            router.push("/dashboard/owner/my-properties");
+            router.refresh();
+        } catch (error) {
+            console.error("Add property error:", error);
+
+            toast.error("Something went wrong.");
+        } finally {
+            setLoading(false);
         }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        toast.error(result.message || "Failed to add property.");
-        return;
-      }
-
-      // =========================
-      // Success
-      // =========================
-
-      toast.success(result.message);
-
-      form.reset();
-
-      router.push("/dashboard/owner/my-properties");
-      router.refresh();
-    } catch (error) {
-      console.error("Add property error:", error);
-
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
     }
-  }
 
-  return (
-    <div className="mx-auto max-w-3xl py-8">
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold">
-            Add New Property
-          </CardTitle>
+    return (
+        <div className="mx-auto max-w-3xl py-8">
+            <Card className="shadow-lg">
+                <CardHeader>
+                    <CardTitle className="text-3xl font-bold">
+                        Add New Property
+                    </CardTitle>
 
-          <CardDescription>
-            Publish your rental property for potential tenants.
-          </CardDescription>
-        </CardHeader>
+                    <CardDescription>
+                        Publish your rental property for potential
+                        tenants.
+                    </CardDescription>
+                </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <fieldset disabled={loading} className="space-y-5">
+                <CardContent>
+                    <form onSubmit={handleSubmit}>
+                        <fieldset
+                            disabled={loading}
+                            className="space-y-5"
+                        >
+                            {/* Title */}
+                            <div className="space-y-2">
+                                <Label htmlFor="title">
+                                    Property Title
+                                </Label>
 
-              {/* Title */}
-              <div className="space-y-2">
-                <Label htmlFor="title">
-                  Property Title
-                </Label>
+                                <Input
+                                    id="title"
+                                    name="title"
+                                    placeholder="Luxury Apartment"
+                                    required
+                                />
+                            </div>
 
-                <Input
-                  id="title"
-                  name="title"
-                  placeholder="Luxury Apartment"
-                  required
-                />
-              </div>
+                            {/* Location */}
+                            <div className="space-y-2">
+                                <Label htmlFor="location">
+                                    Location
+                                </Label>
 
-              {/* Location */}
-              <div className="space-y-2">
-                <Label htmlFor="location">
-                  Location
-                </Label>
+                                <Input
+                                    id="location"
+                                    name="location"
+                                    placeholder="Mirpur DOHS"
+                                    required
+                                />
+                            </div>
 
-                <Input
-                  id="location"
-                  name="location"
-                  placeholder="Mirpur DOHS"
-                  required
-                />
-              </div>
+                            {/* City */}
+                            <div className="space-y-2">
+                                <Label htmlFor="city">
+                                    City
+                                </Label>
 
-              {/* City */}
-              <div className="space-y-2">
-                <Label htmlFor="city">
-                  City
-                </Label>
+                                <Input
+                                    id="city"
+                                    name="city"
+                                    placeholder="Dhaka"
+                                    required
+                                />
+                            </div>
 
-                <Input
-                  id="city"
-                  name="city"
-                  placeholder="Dhaka"
-                  required
-                />
-              </div>
+                            {/* Property Type */}
+                            <div className="space-y-2">
+                                <Label htmlFor="propertyType">
+                                    Property Type
+                                </Label>
 
-              {/* Property Info */}
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                                <select
+                                    id="propertyType"
+                                    name="propertyType"
+                                    required
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                >
+                                    <option value="">
+                                        Select Property Type
+                                    </option>
 
-                {/* Rent */}
-                <div className="space-y-2">
-                  <Label htmlFor="rent">
-                    Monthly Rent (৳)
-                  </Label>
+                                    <option value="Apartment">
+                                        Apartment
+                                    </option>
 
-                  <Input
-                    id="rent"
-                    name="rent"
-                    type="number"
-                    min={1}
-                    placeholder="15000"
-                    required
-                  />
-                </div>
+                                    <option value="House">
+                                        House
+                                    </option>
 
-                {/* Area */}
-                <div className="space-y-2">
-                  <Label htmlFor="area">
-                    Area (sq ft)
-                  </Label>
+                                    <option value="Room">
+                                        Room
+                                    </option>
 
-                  <Input
-                    id="area"
-                    name="area"
-                    type="number"
-                    min={1}
-                    placeholder="1200"
-                    required
-                  />
-                </div>
+                                    <option value="Villa">
+                                        Villa
+                                    </option>
+                                </select>
+                            </div>
 
-                {/* Bedrooms */}
-                <div className="space-y-2">
-                  <Label htmlFor="bedrooms">
-                    Bedrooms
-                  </Label>
+                            {/* Property Info */}
+                            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                                {/* Rent */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="rent">
+                                        Monthly Rent (৳)
+                                    </Label>
 
-                  <Input
-                    id="bedrooms"
-                    name="bedrooms"
-                    type="number"
-                    min={1}
-                    placeholder="3"
-                    required
-                  />
-                </div>
+                                    <Input
+                                        id="rent"
+                                        name="rent"
+                                        type="number"
+                                        min={1}
+                                        placeholder="15000"
+                                        required
+                                    />
+                                </div>
 
-                {/* Bathrooms */}
-                <div className="space-y-2">
-                  <Label htmlFor="bathrooms">
-                    Bathrooms
-                  </Label>
+                                {/* Area */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="area">
+                                        Area (sq ft)
+                                    </Label>
 
-                  <Input
-                    id="bathrooms"
-                    name="bathrooms"
-                    type="number"
-                    min={1}
-                    placeholder="2"
-                    required
-                  />
-                </div>
+                                    <Input
+                                        id="area"
+                                        name="area"
+                                        type="number"
+                                        min={1}
+                                        placeholder="1200"
+                                        required
+                                    />
+                                </div>
 
-              </div>
+                                {/* Bedrooms */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="bedrooms">
+                                        Bedrooms
+                                    </Label>
 
-              {/* Description */}
-              <div className="space-y-2">
-                <Label htmlFor="description">
-                  Description
-                </Label>
+                                    <Input
+                                        id="bedrooms"
+                                        name="bedrooms"
+                                        type="number"
+                                        min={1}
+                                        placeholder="3"
+                                        required
+                                    />
+                                </div>
 
-                <Textarea
-                  id="description"
-                  name="description"
-                  rows={5}
-                  maxLength={500}
-                  placeholder="Write a short description about the property..."
-                  required
-                />
-              </div>
+                                {/* Bathrooms */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="bathrooms">
+                                        Bathrooms
+                                    </Label>
 
-              {/* Image */}
-              <div className="space-y-2">
-                <Label htmlFor="image">
-                  Property Image
-                </Label>
+                                    <Input
+                                        id="bathrooms"
+                                        name="bathrooms"
+                                        type="number"
+                                        min={1}
+                                        placeholder="2"
+                                        required
+                                    />
+                                </div>
+                            </div>
 
-                <Input
-                  id="image"
-                  name="image"
-                  type="file"
-                  accept="image/*"
-                  required
-                />
-              </div>
+                            {/* Description */}
+                            <div className="space-y-2">
+                                <Label htmlFor="description">
+                                    Description
+                                </Label>
 
-              {/* Submit */}
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full"
-              >
-                {loading
-                  ? "Adding Property..."
-                  : "Add Property"}
-              </Button>
+                                <Textarea
+                                    id="description"
+                                    name="description"
+                                    rows={5}
+                                    maxLength={500}
+                                    placeholder="Write a short description about the property..."
+                                    required
+                                />
+                            </div>
 
-            </fieldset>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
-  );
+                            {/* Image */}
+                            <div className="space-y-2">
+                                <Label htmlFor="image">
+                                    Property Image
+                                </Label>
+
+                                <Input
+                                    id="image"
+                                    name="image"
+                                    type="file"
+                                    accept="image/*"
+                                    required
+                                />
+                            </div>
+
+                            {/* Submit */}
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full"
+                            >
+                                {loading
+                                    ? "Adding Property..."
+                                    : "Add Property"}
+                            </Button>
+                        </fieldset>
+                    </form>
+                </CardContent>
+            </Card>
+        </div>
+    );
 }

@@ -19,6 +19,10 @@ export default async function AddPropertyPage() {
     }
 
     return (
-        <AddPropertyForm ownerId={session.user.id} />
+        <AddPropertyForm
+            ownerId={session.user.id}
+            ownerName={session.user.name}
+            ownerEmail={session.user.email}
+        />
     );
 }

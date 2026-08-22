@@ -1,7 +1,9 @@
+import RentinaBanner from "@/components/RentinaBanner";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl font-bold">Rentina</h1>
+    <main className="">
+      <RentinaBanner></RentinaBanner>
     </main>
   );
 }

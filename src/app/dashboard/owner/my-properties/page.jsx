@@ -23,15 +23,31 @@ export default async function MyPropertiesPage() {
     const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
     const response = await fetch(
-        `${serverUrl}/api/properties/my?ownerId=${session.user.id}`,
+        `${serverUrl}/api/owner-properties/${session.user.id}`,
         {
             cache: "no-store",
         }
     );
 
+    if (!response.ok) {
+        return (
+            <div className="p-6">
+                <h2 className="text-xl font-semibold">
+                    Failed to load properties
+                </h2>
+
+                <p className="mt-2 text-gray-500">
+                    Please try again later.
+                </p>
+            </div>
+        );
+    }
+
     const data = await response.json();
 
-    const properties = data.success ? data.properties : [];
+    const properties = data.success
+        ? data.properties
+        : [];
 
     return (
         <div className="space-y-6">
@@ -81,7 +97,8 @@ export default async function MyPropertiesPage() {
                                 </h2>
 
                                 <p className="text-sm text-gray-500">
-                                    {property.location}, {property.city}
+                                    {property.location},{" "}
+                                    {property.city}
                                 </p>
 
                                 <p className="font-semibold text-green-600">
@@ -116,8 +133,12 @@ export default async function MyPropertiesPage() {
                                     </Link>
 
                                     <DeletePropertyButton
-                                        propertyId={property._id}
-                                        ownerId={session.user.id}
+                                        propertyId={
+                                            property._id
+                                        }
+                                        ownerId={
+                                            session.user.id
+                                        }
                                     />
                                 </div>
                             </div>
