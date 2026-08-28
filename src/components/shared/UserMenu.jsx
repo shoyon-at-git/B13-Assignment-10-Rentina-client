@@ -66,7 +66,7 @@ export default function UserMenu({ session }) {
 
                 <DropdownMenuItem asChild>
                     <Link
-                        href="/dashboard"
+                        href={`/dashboard/${session?.user?.role}`}
                         className="cursor-pointer flex items-center gap-2"
                     >
                         <MdDashboard />

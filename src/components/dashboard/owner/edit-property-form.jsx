@@ -64,7 +64,7 @@ export default function EditPropertyForm({ property, ownerId }) {
                 description: formData.get("description")?.trim(),
 
                 image: imageUrl,
-
+                mapUrl: formData.get("mapUrl")?.trim(),
                 status: formData.get("status"),
             };
 
@@ -327,11 +327,22 @@ export default function EditPropertyForm({ property, ownerId }) {
                                     required
                                 />
                             </div>
-
-                            {/* Current Image */}
+                            {/* Google Maps URL */}
 
                             <div className="space-y-2">
-                                <Label>Current Image</Label>
+                                <Label htmlFor="mapUrl">Google Maps URL</Label>
+
+                                <Input
+                                    id="mapUrl"
+                                    name="mapUrl"
+                                    type="url"
+                                    defaultValue={property.mapUrl || ""}
+                                    placeholder="Paste Google Maps URL"
+                                />
+
+                                <p className="text-sm text-gray-500">
+                                    Update the Google Maps location of your property.
+                                </p>
                             </div>
 
                             {/* New Image */}

@@ -75,7 +75,7 @@ export default function MobileMenu({ session }) {
                         </>
                     ) : (
                         <>
-                            <Link href="/dashboard">
+                            <Link  href={`/dashboard/${session?.user?.role}`}>
                                 Dashboard
                             </Link>
 

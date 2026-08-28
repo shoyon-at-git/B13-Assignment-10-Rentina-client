@@ -51,6 +51,11 @@ export default async function MyPropertiesPage() {
 
     return (
         <div className="space-y-6">
+
+            {/* =========================
+                Header
+            ========================= */}
+
             <div>
                 <h1 className="text-3xl font-bold">
                     My Properties
@@ -61,8 +66,13 @@ export default async function MyPropertiesPage() {
                 </p>
             </div>
 
+            {/* =========================
+                No Properties
+            ========================= */}
+
             {properties.length === 0 ? (
                 <div className="rounded-lg border p-10 text-center">
+
                     <h2 className="text-xl font-semibold">
                         No properties found.
                     </h2>
@@ -70,16 +80,29 @@ export default async function MyPropertiesPage() {
                     <p className="mt-2 text-gray-500">
                         Add your first property.
                     </p>
+
                 </div>
             ) : (
+
+                /* =========================
+                   Property Cards
+                ========================= */
+
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
                     {properties.map((property) => (
+
                         <div
                             key={property._id}
                             className="overflow-hidden rounded-xl border bg-white shadow-sm"
                         >
-                            {/* Image */}
+
+                            {/* =========================
+                                Image
+                            ========================= */}
+
                             <div className="relative h-56 w-full">
+
                                 <Image
                                     src={property.image}
                                     alt={property.title}
@@ -88,24 +111,38 @@ export default async function MyPropertiesPage() {
                                     unoptimized
                                     className="object-cover"
                                 />
+
                             </div>
 
-                            {/* Content */}
+                            {/* =========================
+                                Content
+                            ========================= */}
+
                             <div className="space-y-2 p-4">
+
+                                {/* Title */}
+
                                 <h2 className="text-xl font-semibold">
                                     {property.title}
                                 </h2>
 
+                                {/* Location */}
+
                                 <p className="text-sm text-gray-500">
-                                    {property.location},{" "}
+                                    📍 {property.location},{" "}
                                     {property.city}
                                 </p>
+
+                                {/* Rent */}
 
                                 <p className="font-semibold text-green-600">
                                     ৳ {property.rent}/month
                                 </p>
 
+                                {/* Property Info */}
+
                                 <div className="flex justify-between text-sm text-gray-600">
+
                                     <span>
                                         {property.bedrooms} Beds
                                     </span>
@@ -117,14 +154,40 @@ export default async function MyPropertiesPage() {
                                     <span>
                                         {property.area} sqft
                                     </span>
+
                                 </div>
+
+                                {/* Status */}
 
                                 <span className="inline-block rounded bg-green-100 px-3 py-1 text-sm text-green-700">
                                     {property.status}
                                 </span>
 
-                                {/* Buttons */}
+                                {/* =========================
+                                    Google Maps
+                                ========================= */}
+
+                                {property.googleMapUrl && (
+                                    <div className="mt-3">
+
+                                        <a
+                                            href={property.googleMapUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full rounded-lg border border-green-600 px-4 py-2 text-center text-sm font-medium text-green-700 transition hover:bg-green-50"
+                                        >
+                                            📍 Go to Google Maps
+                                        </a>
+
+                                    </div>
+                                )}
+
+                                {/* =========================
+                                    Buttons
+                                ========================= */}
+
                                 <div className="mt-4 flex gap-2">
+
                                     <Link
                                         href={`/dashboard/owner/my-properties/${property._id}`}
                                         className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white transition hover:bg-blue-700"
@@ -133,19 +196,22 @@ export default async function MyPropertiesPage() {
                                     </Link>
 
                                     <DeletePropertyButton
-                                        propertyId={
-                                            property._id
-                                        }
-                                        ownerId={
-                                            session.user.id
-                                        }
+                                        propertyId={property._id}
+                                        ownerId={session.user.id}
                                     />
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     ))}
+
                 </div>
+
             )}
+
         </div>
     );
 }

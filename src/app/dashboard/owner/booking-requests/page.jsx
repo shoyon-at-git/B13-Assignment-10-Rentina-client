@@ -87,7 +87,9 @@ export default async function BookingRequestsPage() {
                                                     ? "bg-yellow-100 text-yellow-700"
                                                     : booking.status === "accepted"
                                                       ? "bg-green-100 text-green-700"
-                                                      : "bg-red-100 text-red-700"
+                                                      : booking.status === "cancelled"
+                                                        ? "bg-gray-100 text-gray-700"
+                                                        : "bg-red-100 text-red-700"
                                             }`}
                                         >
                                             {booking.status}

@@ -25,7 +25,7 @@ export default async function PropertyDetailsPage({ params }) {
     const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
     const response = await fetch(
-        `${serverUrl}/api/properties/${id}?ownerId=${session.user.id}`,
+        `${serverUrl}/api/properties/${id}`,
         {
             cache: "no-store",
         }
@@ -59,8 +59,45 @@ export default async function PropertyDetailsPage({ params }) {
 
     const property = data.property;
 
+    // =========================
+    // Google Maps Embed URL
+    // =========================
+
+    function getGoogleMapEmbedUrl(url) {
+        if (!url) return null;
+
+        try {
+            const decodedUrl = decodeURIComponent(url);
+
+            // Try to get latitude and longitude
+            const match = decodedUrl.match(
+                /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/
+            );
+
+            if (match) {
+                const lat = match[1];
+                const lng = match[2];
+
+                return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+            }
+
+            // If coordinates are not found,
+            // use the Google Maps URL as a query
+            return `https://www.google.com/maps?q=${encodeURIComponent(
+                decodedUrl
+            )}&output=embed`;
+        } catch {
+            return null;
+        }
+    }
+
+    const mapEmbedUrl = getGoogleMapEmbedUrl(
+        property.mapUrl
+    );
+
     return (
         <div className="mx-auto max-w-5xl space-y-6 py-8">
+
             {/* =========================
                 Header
             ========================= */}
@@ -89,6 +126,7 @@ export default async function PropertyDetailsPage({ params }) {
             ========================= */}
 
             <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+
                 {/* Property Image */}
 
                 <div className="relative h-[300px] w-full sm:h-[400px]">
@@ -105,6 +143,7 @@ export default async function PropertyDetailsPage({ params }) {
                 {/* Content */}
 
                 <div className="space-y-7 p-6">
+
                     {/* =========================
                         Title + Status
                     ========================= */}
@@ -166,7 +205,6 @@ export default async function PropertyDetailsPage({ params }) {
                         </h3>
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                            {/* Bedrooms */}
 
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
@@ -178,8 +216,6 @@ export default async function PropertyDetailsPage({ params }) {
                                 </p>
                             </div>
 
-                            {/* Bathrooms */}
-
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
                                     🚿 Bathrooms
@@ -189,8 +225,6 @@ export default async function PropertyDetailsPage({ params }) {
                                     {property.bathrooms}
                                 </p>
                             </div>
-
-                            {/* Area */}
 
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
@@ -206,8 +240,6 @@ export default async function PropertyDetailsPage({ params }) {
                                 </p>
                             </div>
 
-                            {/* Property Type */}
-
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
                                     🏠 Property Type
@@ -217,8 +249,6 @@ export default async function PropertyDetailsPage({ params }) {
                                     {property.propertyType}
                                 </p>
                             </div>
-
-                            {/* City */}
 
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
@@ -230,8 +260,6 @@ export default async function PropertyDetailsPage({ params }) {
                                 </p>
                             </div>
 
-                            {/* Location */}
-
                             <div className="rounded-xl border p-5">
                                 <p className="text-sm text-gray-500">
                                     📍 Location
@@ -241,6 +269,7 @@ export default async function PropertyDetailsPage({ params }) {
                                     {property.location}
                                 </p>
                             </div>
+
                         </div>
                     </div>
 
@@ -255,7 +284,6 @@ export default async function PropertyDetailsPage({ params }) {
 
                         <div className="rounded-xl border bg-gray-50 p-5">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                {/* Owner Name */}
 
                                 <div>
                                     <p className="text-sm text-gray-500">
@@ -267,8 +295,6 @@ export default async function PropertyDetailsPage({ params }) {
                                             "Not available"}
                                     </p>
                                 </div>
-
-                                {/* Owner Email */}
 
                                 <div>
                                     <p className="text-sm text-gray-500">
@@ -302,6 +328,50 @@ export default async function PropertyDetailsPage({ params }) {
                     </div>
 
                     {/* =========================
+                        Google Maps
+                    ========================= */}
+
+                    {property.mapUrl && (
+                        <div>
+                            <h3 className="mb-4 text-xl font-semibold">
+                                📍 Property Location
+                            </h3>
+
+                            <div className="overflow-hidden rounded-xl border">
+                                {mapEmbedUrl ? (
+                                    <iframe
+                                        src={mapEmbedUrl}
+                                        width="100%"
+                                        height="400"
+                                        style={{
+                                            border: 0,
+                                        }}
+                                        loading="lazy"
+                                        allowFullScreen
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title={`Map for ${property.title}`}
+                                    />
+                                ) : (
+                                    <div className="p-5 text-center text-gray-500">
+                                        Unable to load map.
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Go to Google Maps */}
+
+                            <a
+                                href={property.mapUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-4 inline-block rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700"
+                            >
+                                🗺️ Go to Google Maps ↗
+                            </a>
+                        </div>
+                    )}
+
+                    {/* =========================
                         Property Metadata
                     ========================= */}
 
@@ -312,11 +382,6 @@ export default async function PropertyDetailsPage({ params }) {
 
                         <div className="rounded-xl border p-5">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                {/* Property ID */}
-
-                                
-
-                                {/* Status */}
 
                                 <div>
                                     <p className="text-sm text-gray-500">
@@ -327,8 +392,6 @@ export default async function PropertyDetailsPage({ params }) {
                                         {property.status}
                                     </p>
                                 </div>
-
-                                {/* Created At */}
 
                                 <div>
                                     <p className="text-sm text-gray-500">
@@ -347,8 +410,6 @@ export default async function PropertyDetailsPage({ params }) {
                                         })}
                                     </p>
                                 </div>
-
-                                {/* Updated At */}
 
                                 {property.updatedAt && (
                                     <div>
@@ -372,6 +433,7 @@ export default async function PropertyDetailsPage({ params }) {
                                         </p>
                                     </div>
                                 )}
+
                             </div>
                         </div>
                     </div>
@@ -381,7 +443,6 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row">
-                        {/* Update */}
 
                         <Link
                             href={`/dashboard/owner/my-properties/${property._id}/edit`}
@@ -390,14 +451,10 @@ export default async function PropertyDetailsPage({ params }) {
                             ✏️ Update Property
                         </Link>
 
-                        {/* Delete */}
-
                         <DeletePropertyButton
                             propertyId={property._id}
                             ownerId={session.user.id}
                         />
-
-                        {/* Back */}
 
                         <Link
                             href="/dashboard/owner/my-properties"
@@ -405,7 +462,9 @@ export default async function PropertyDetailsPage({ params }) {
                         >
                             Back to Properties
                         </Link>
+
                     </div>
+
                 </div>
             </div>
         </div>

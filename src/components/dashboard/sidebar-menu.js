@@ -11,18 +11,18 @@ import {
 
 export const tenantMenu = [
     {
+        label: "All Properties",
+        href: "/dashboard/properties",
+        icon: FaHome,
+    },
+    {
         label: "My Bookings",
         href: "/dashboard/tenant/bookings",
         icon: FaClipboardList,
     },
     {
-        label: "Favorites",
-        href: "/dashboard/tenant/favorites",
-        icon: FaHeart,
-    },
-    {
         label: "Profile",
-        href: "/dashboard/tenant/profile",
+        href: "/dashboard/profile",
         icon: FaUserCircle,
     },
 ];
@@ -50,7 +50,7 @@ export const ownerMenu = [
     },
     {
         label: "Profile",
-        href: "/dashboard/owner/profile",
+        href: "/dashboard/profile",
         icon: FaUserCircle,
     },
 ];
@@ -78,7 +78,7 @@ export const adminMenu = [
     },
     {
         label: "Profile",
-        href: "/dashboard/admin/profile",
+        href: "/dashboard/profile",
         icon: FaUserCircle,
     },
 ];

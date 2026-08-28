@@ -6,24 +6,14 @@ import { toast } from "react-toastify";
 
 import { uploadImage } from "@/actions/uploadImage";
 
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function AddPropertyForm({
-    ownerId,
-    ownerName,
-    ownerEmail,
-}) {
+export default function AddPropertyForm({ ownerId, ownerName, ownerEmail }) {
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
@@ -81,6 +71,7 @@ export default function AddPropertyForm({
                 description: formData.get("description")?.trim(),
 
                 image: imageUrl,
+                mapUrl: formData.get("mapUrl")?.trim(),
             };
 
             // =========================
@@ -111,23 +102,18 @@ export default function AddPropertyForm({
             // Express API
             // =========================
 
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(propertyData),
-                }
-            );
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/properties`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(propertyData),
+            });
 
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                toast.error(
-                    result.message || "Failed to add property."
-                );
+                toast.error(result.message || "Failed to add property.");
                 return;
             }
 
@@ -154,69 +140,48 @@ export default function AddPropertyForm({
         <div className="mx-auto max-w-3xl py-8">
             <Card className="shadow-lg">
                 <CardHeader>
-                    <CardTitle className="text-3xl font-bold">
-                        Add New Property
-                    </CardTitle>
+                    <CardTitle className="text-3xl font-bold">Add New Property</CardTitle>
 
-                    <CardDescription>
-                        Publish your rental property for potential
-                        tenants.
-                    </CardDescription>
+                    <CardDescription>Publish your rental property for potential tenants.</CardDescription>
                 </CardHeader>
 
                 <CardContent>
                     <form onSubmit={handleSubmit}>
-                        <fieldset
-                            disabled={loading}
-                            className="space-y-5"
-                        >
+                        <fieldset disabled={loading} className="space-y-5">
                             {/* Title */}
                             <div className="space-y-2">
-                                <Label htmlFor="title">
-                                    Property Title
-                                </Label>
+                                <Label htmlFor="title">Property Title</Label>
 
-                                <Input
-                                    id="title"
-                                    name="title"
-                                    placeholder="Luxury Apartment"
-                                    required
-                                />
+                                <Input id="title" name="title" placeholder="Luxury Apartment" required />
                             </div>
 
                             {/* Location */}
                             <div className="space-y-2">
-                                <Label htmlFor="location">
-                                    Location
-                                </Label>
+                                <Label htmlFor="location">Location</Label>
 
-                                <Input
-                                    id="location"
-                                    name="location"
-                                    placeholder="Mirpur DOHS"
-                                    required
-                                />
+                                <Input id="location" name="location" placeholder="Mirpur DOHS" required />
+                            </div>
+                            {/* Google Maps URL */}
+                            <div className="space-y-2">
+                                <Label htmlFor="mapUrl">Google Maps URL (Optional)</Label>
+
+                                <Input id="mapUrl" name="mapUrl" type="url" placeholder="Paste Google Maps link" />
+
+                                <p className="text-sm text-muted-foreground">
+                                    Optional: Paste the Google Maps share link for this property.
+                                </p>
                             </div>
 
                             {/* City */}
                             <div className="space-y-2">
-                                <Label htmlFor="city">
-                                    City
-                                </Label>
+                                <Label htmlFor="city">City</Label>
 
-                                <Input
-                                    id="city"
-                                    name="city"
-                                    placeholder="Dhaka"
-                                    required
-                                />
+                                <Input id="city" name="city" placeholder="Dhaka" required />
                             </div>
 
                             {/* Property Type */}
                             <div className="space-y-2">
-                                <Label htmlFor="propertyType">
-                                    Property Type
-                                </Label>
+                                <Label htmlFor="propertyType">Property Type</Label>
 
                                 <select
                                     id="propertyType"
@@ -224,25 +189,15 @@ export default function AddPropertyForm({
                                     required
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                                 >
-                                    <option value="">
-                                        Select Property Type
-                                    </option>
+                                    <option value="">Select Property Type</option>
 
-                                    <option value="Apartment">
-                                        Apartment
-                                    </option>
+                                    <option value="Apartment">Apartment</option>
 
-                                    <option value="House">
-                                        House
-                                    </option>
+                                    <option value="House">House</option>
 
-                                    <option value="Room">
-                                        Room
-                                    </option>
+                                    <option value="Room">Room</option>
 
-                                    <option value="Villa">
-                                        Villa
-                                    </option>
+                                    <option value="Villa">Villa</option>
                                 </select>
                             </div>
 
@@ -250,41 +205,21 @@ export default function AddPropertyForm({
                             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                                 {/* Rent */}
                                 <div className="space-y-2">
-                                    <Label htmlFor="rent">
-                                        Monthly Rent (৳)
-                                    </Label>
+                                    <Label htmlFor="rent">Monthly Rent (৳)</Label>
 
-                                    <Input
-                                        id="rent"
-                                        name="rent"
-                                        type="number"
-                                        min={1}
-                                        placeholder="15000"
-                                        required
-                                    />
+                                    <Input id="rent" name="rent" type="number" min={1} placeholder="15000" required />
                                 </div>
 
                                 {/* Area */}
                                 <div className="space-y-2">
-                                    <Label htmlFor="area">
-                                        Area (sq ft)
-                                    </Label>
+                                    <Label htmlFor="area">Area (sq ft)</Label>
 
-                                    <Input
-                                        id="area"
-                                        name="area"
-                                        type="number"
-                                        min={1}
-                                        placeholder="1200"
-                                        required
-                                    />
+                                    <Input id="area" name="area" type="number" min={1} placeholder="1200" required />
                                 </div>
 
                                 {/* Bedrooms */}
                                 <div className="space-y-2">
-                                    <Label htmlFor="bedrooms">
-                                        Bedrooms
-                                    </Label>
+                                    <Label htmlFor="bedrooms">Bedrooms</Label>
 
                                     <Input
                                         id="bedrooms"
@@ -298,9 +233,7 @@ export default function AddPropertyForm({
 
                                 {/* Bathrooms */}
                                 <div className="space-y-2">
-                                    <Label htmlFor="bathrooms">
-                                        Bathrooms
-                                    </Label>
+                                    <Label htmlFor="bathrooms">Bathrooms</Label>
 
                                     <Input
                                         id="bathrooms"
@@ -315,9 +248,7 @@ export default function AddPropertyForm({
 
                             {/* Description */}
                             <div className="space-y-2">
-                                <Label htmlFor="description">
-                                    Description
-                                </Label>
+                                <Label htmlFor="description">Description</Label>
 
                                 <Textarea
                                     id="description"
@@ -331,28 +262,14 @@ export default function AddPropertyForm({
 
                             {/* Image */}
                             <div className="space-y-2">
-                                <Label htmlFor="image">
-                                    Property Image
-                                </Label>
+                                <Label htmlFor="image">Property Image</Label>
 
-                                <Input
-                                    id="image"
-                                    name="image"
-                                    type="file"
-                                    accept="image/*"
-                                    required
-                                />
+                                <Input id="image" name="image" type="file" accept="image/*" required />
                             </div>
 
                             {/* Submit */}
-                            <Button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full"
-                            >
-                                {loading
-                                    ? "Adding Property..."
-                                    : "Add Property"}
+                            <Button type="submit" disabled={loading} className="w-full">
+                                {loading ? "Adding Property..." : "Add Property"}
                             </Button>
                         </fieldset>
                     </form>

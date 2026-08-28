@@ -3,6 +3,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "@/components/shared/Navbar";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
         <Navbar></Navbar>
         
         {children}
+        
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -37,6 +39,7 @@ export default function RootLayout({ children }) {
           pauseOnHover
           theme="light"
         />
+        
       </body>
     </html>
   );
