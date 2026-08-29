@@ -1,7 +1,6 @@
 import { redirect, notFound } from "next/navigation";
-
-import EditPropertyForm from "@/components/dashboard/owner/EditPropertyForm";
 import { auth } from "@/lib/auth";
+import EditPropertyForm from "@/components/dashboard/owner/EditPropertyForm";
 
 export default async function EditPropertyPage({ params }) {
     const { id } = await params;
