@@ -1,4 +1,6 @@
 import { redirect, notFound } from "next/navigation";
+import { headers } from "next/headers";
+
 import { auth } from "@/lib/auth";
 import EditPropertyForm from "@/components/dashboard/owner/EditPropertyForm";
 
@@ -9,7 +11,9 @@ export default async function EditPropertyPage({ params }) {
     // Get Current Session
     // =========================
 
-    const session = await auth();
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
 
     if (!session?.user) {
         redirect("/login");
@@ -24,7 +28,7 @@ export default async function EditPropertyPage({ params }) {
     }
 
     // =========================
-    // Get Server URL
+    // Server URL
     // =========================
 
     const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -61,7 +65,7 @@ export default async function EditPropertyPage({ params }) {
     }
 
     // =========================
-    // Render Edit Form
+    // Render Form
     // =========================
 
     return (
