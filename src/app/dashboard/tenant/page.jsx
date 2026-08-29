@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import TenantChart from "@/components/dashboard/tenant/tenant-chart";
+import TenantChart from "@/components/dashboard/tenant/TenantChart";
 
 export default async function TenantDashboardPage() {
     const session = await auth.api.getSession({

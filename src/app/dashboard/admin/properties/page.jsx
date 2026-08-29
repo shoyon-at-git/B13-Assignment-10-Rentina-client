@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-import AdminPropertiesClient from "@/components/dashboard/admin/admin-properties-client";
+import AdminPropertiesClient from "@/components/dashboard/admin/AdminPropertiesClient";
 
 export default async function AdminPropertiesPage() {
     const session = await auth.api.getSession({

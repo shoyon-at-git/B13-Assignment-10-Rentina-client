@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 
-import EditPropertyForm from "@/components/dashboard/owner/edit-property-form";
+import EditPropertyForm from "@/components/dashboard/owner/EditPropertyForm";
 
 export default async function EditPropertyPage({ params }) {
     const session = await auth.api.getSession({

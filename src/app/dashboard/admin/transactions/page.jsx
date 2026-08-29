@@ -1,4 +1,4 @@
-import UnderDevelopmentPage from '@/components/under-development/under-dev';
+import UnderDevelopmentPage from '@/components/under-development/UnderDevelopmentPage';
 import React from 'react';
 
 const page = () => {

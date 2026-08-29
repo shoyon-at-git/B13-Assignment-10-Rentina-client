@@ -3,7 +3,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import DeletePropertyButton from "@/components/dashboard/owner/delete-property-button";
+import DeletePropertyButton from "@/components/dashboard/owner/DeletePropertyButton";
 
 export default async function PropertyDetailsPage({ params }) {
     const session = await auth.api.getSession({
@@ -13,9 +13,7 @@ export default async function PropertyDetailsPage({ params }) {
     if (!session) {
         return (
             <div className="p-6">
-                <h2 className="text-xl font-semibold">
-                    Unauthorized
-                </h2>
+                <h2 className="text-xl font-semibold">Unauthorized</h2>
             </div>
         );
     }
@@ -24,12 +22,9 @@ export default async function PropertyDetailsPage({ params }) {
 
     const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
-    const response = await fetch(
-        `${serverUrl}/api/properties/${id}`,
-        {
-            cache: "no-store",
-        }
-    );
+    const response = await fetch(`${serverUrl}/api/properties/${id}`, {
+        cache: "no-store",
+    });
 
     const data = await response.json();
 
@@ -37,13 +32,10 @@ export default async function PropertyDetailsPage({ params }) {
         return (
             <div className="mx-auto max-w-3xl p-6">
                 <div className="rounded-xl border bg-white p-10 text-center shadow-sm">
-                    <h2 className="text-2xl font-semibold">
-                        Property not found
-                    </h2>
+                    <h2 className="text-2xl font-semibold">Property not found</h2>
 
                     <p className="mt-2 text-gray-500">
-                        This property does not exist or you do not
-                        have permission to view it.
+                        This property does not exist or you do not have permission to view it.
                     </p>
 
                     <Link
@@ -70,9 +62,7 @@ export default async function PropertyDetailsPage({ params }) {
             const decodedUrl = decodeURIComponent(url);
 
             // Try to get latitude and longitude
-            const match = decodedUrl.match(
-                /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/
-            );
+            const match = decodedUrl.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
 
             if (match) {
                 const lat = match[1];
@@ -83,34 +73,25 @@ export default async function PropertyDetailsPage({ params }) {
 
             // If coordinates are not found,
             // use the Google Maps URL as a query
-            return `https://www.google.com/maps?q=${encodeURIComponent(
-                decodedUrl
-            )}&output=embed`;
+            return `https://www.google.com/maps?q=${encodeURIComponent(decodedUrl)}&output=embed`;
         } catch {
             return null;
         }
     }
 
-    const mapEmbedUrl = getGoogleMapEmbedUrl(
-        property.mapUrl
-    );
+    const mapEmbedUrl = getGoogleMapEmbedUrl(property.mapUrl);
 
     return (
         <div className="mx-auto max-w-5xl space-y-6 py-8">
-
             {/* =========================
                 Header
             ========================= */}
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">
-                        Property Details
-                    </h1>
+                    <h1 className="text-3xl font-bold">Property Details</h1>
 
-                    <p className="mt-1 text-gray-500">
-                        View and manage your property.
-                    </p>
+                    <p className="mt-1 text-gray-500">View and manage your property.</p>
                 </div>
 
                 <Link
@@ -126,7 +107,6 @@ export default async function PropertyDetailsPage({ params }) {
             ========================= */}
 
             <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
-
                 {/* Property Image */}
 
                 <div className="relative h-[300px] w-full sm:h-[400px]">
@@ -143,25 +123,19 @@ export default async function PropertyDetailsPage({ params }) {
                 {/* Content */}
 
                 <div className="space-y-7 p-6">
-
                     {/* =========================
                         Title + Status
                     ========================= */}
 
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
-                            <h2 className="text-3xl font-bold">
-                                {property.title}
-                            </h2>
+                            <h2 className="text-3xl font-bold">{property.title}</h2>
 
                             <p className="mt-2 text-gray-500">
-                                📍 {property.location},{" "}
-                                {property.city}
+                                📍 {property.location}, {property.city}
                             </p>
 
-                            <p className="mt-2 text-sm text-gray-500">
-                                🏠 {property.propertyType}
-                            </p>
+                            <p className="mt-2 text-sm text-gray-500">🏠 {property.propertyType}</p>
                         </div>
 
                         <span
@@ -182,17 +156,11 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div className="rounded-xl bg-green-50 p-5">
-                        <p className="text-sm font-medium text-gray-500">
-                            Monthly Rent
-                        </p>
+                        <p className="text-sm font-medium text-gray-500">Monthly Rent</p>
 
-                        <p className="mt-1 text-3xl font-bold text-green-600">
-                            ৳ {property.rent}
-                        </p>
+                        <p className="mt-1 text-3xl font-bold text-green-600">৳ {property.rent}</p>
 
-                        <p className="mt-1 text-sm text-gray-500">
-                            per month
-                        </p>
+                        <p className="mt-1 text-sm text-gray-500">per month</p>
                     </div>
 
                     {/* =========================
@@ -200,76 +168,46 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div>
-                        <h3 className="mb-4 text-xl font-semibold">
-                            Property Information
-                        </h3>
+                        <h3 className="mb-4 text-xl font-semibold">Property Information</h3>
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    🛏️ Bedrooms
-                                </p>
+                                <p className="text-sm text-gray-500">🛏️ Bedrooms</p>
 
-                                <p className="mt-1 text-2xl font-semibold">
-                                    {property.bedrooms}
-                                </p>
+                                <p className="mt-1 text-2xl font-semibold">{property.bedrooms}</p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    🚿 Bathrooms
-                                </p>
+                                <p className="text-sm text-gray-500">🚿 Bathrooms</p>
 
-                                <p className="mt-1 text-2xl font-semibold">
-                                    {property.bathrooms}
-                                </p>
+                                <p className="mt-1 text-2xl font-semibold">{property.bathrooms}</p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    📐 Area
-                                </p>
+                                <p className="text-sm text-gray-500">📐 Area</p>
 
-                                <p className="mt-1 text-2xl font-semibold">
-                                    {property.area}
-                                </p>
+                                <p className="mt-1 text-2xl font-semibold">{property.area}</p>
 
-                                <p className="text-sm text-gray-500">
-                                    sqft
-                                </p>
+                                <p className="text-sm text-gray-500">sqft</p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    🏠 Property Type
-                                </p>
+                                <p className="text-sm text-gray-500">🏠 Property Type</p>
 
-                                <p className="mt-1 text-lg font-semibold">
-                                    {property.propertyType}
-                                </p>
+                                <p className="mt-1 text-lg font-semibold">{property.propertyType}</p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    🌆 City
-                                </p>
+                                <p className="text-sm text-gray-500">🌆 City</p>
 
-                                <p className="mt-1 text-lg font-semibold">
-                                    {property.city}
-                                </p>
+                                <p className="mt-1 text-lg font-semibold">{property.city}</p>
                             </div>
 
                             <div className="rounded-xl border p-5">
-                                <p className="text-sm text-gray-500">
-                                    📍 Location
-                                </p>
+                                <p className="text-sm text-gray-500">📍 Location</p>
 
-                                <p className="mt-1 text-lg font-semibold">
-                                    {property.location}
-                                </p>
+                                <p className="mt-1 text-lg font-semibold">{property.location}</p>
                             </div>
-
                         </div>
                     </div>
 
@@ -278,35 +216,23 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div>
-                        <h3 className="mb-4 text-xl font-semibold">
-                            Owner Information
-                        </h3>
+                        <h3 className="mb-4 text-xl font-semibold">Owner Information</h3>
 
                         <div className="rounded-xl border bg-gray-50 p-5">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
                                 <div>
-                                    <p className="text-sm text-gray-500">
-                                        👤 Owner Name
-                                    </p>
+                                    <p className="text-sm text-gray-500">👤 Owner Name</p>
 
-                                    <p className="mt-1 font-semibold">
-                                        {property.ownerName ||
-                                            "Not available"}
-                                    </p>
+                                    <p className="mt-1 font-semibold">{property.ownerName || "Not available"}</p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-gray-500">
-                                        ✉️ Owner Email
-                                    </p>
+                                    <p className="text-sm text-gray-500">✉️ Owner Email</p>
 
                                     <p className="mt-1 break-all font-semibold">
-                                        {property.ownerEmail ||
-                                            "Not available"}
+                                        {property.ownerEmail || "Not available"}
                                     </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -316,14 +242,10 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div>
-                        <h3 className="text-xl font-semibold">
-                            Description
-                        </h3>
+                        <h3 className="text-xl font-semibold">Description</h3>
 
                         <div className="mt-3 rounded-xl border bg-gray-50 p-5">
-                            <p className="leading-7 text-gray-600">
-                                {property.description}
-                            </p>
+                            <p className="leading-7 text-gray-600">{property.description}</p>
                         </div>
                     </div>
 
@@ -333,9 +255,7 @@ export default async function PropertyDetailsPage({ params }) {
 
                     {property.mapUrl && (
                         <div>
-                            <h3 className="mb-4 text-xl font-semibold">
-                                📍 Property Location
-                            </h3>
+                            <h3 className="mb-4 text-xl font-semibold">📍 Property Location</h3>
 
                             <div className="overflow-hidden rounded-xl border">
                                 {mapEmbedUrl ? (
@@ -352,9 +272,7 @@ export default async function PropertyDetailsPage({ params }) {
                                         title={`Map for ${property.title}`}
                                     />
                                 ) : (
-                                    <div className="p-5 text-center text-gray-500">
-                                        Unable to load map.
-                                    </div>
+                                    <div className="p-5 text-center text-gray-500">Unable to load map.</div>
                                 )}
                             </div>
 
@@ -376,32 +294,21 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div>
-                        <h3 className="mb-4 text-xl font-semibold">
-                            Property Information
-                        </h3>
+                        <h3 className="mb-4 text-xl font-semibold">Property Information</h3>
 
                         <div className="rounded-xl border p-5">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
                                 <div>
-                                    <p className="text-sm text-gray-500">
-                                        📌 Status
-                                    </p>
+                                    <p className="text-sm text-gray-500">📌 Status</p>
 
-                                    <p className="mt-1 font-semibold capitalize">
-                                        {property.status}
-                                    </p>
+                                    <p className="mt-1 font-semibold capitalize">{property.status}</p>
                                 </div>
 
                                 <div>
-                                    <p className="text-sm text-gray-500">
-                                        📅 Created At
-                                    </p>
+                                    <p className="text-sm text-gray-500">📅 Created At</p>
 
                                     <p className="mt-1 font-medium">
-                                        {new Date(
-                                            property.createdAt
-                                        ).toLocaleString("en-BD", {
+                                        {new Date(property.createdAt).toLocaleString("en-BD", {
                                             day: "2-digit",
                                             month: "long",
                                             year: "numeric",
@@ -413,27 +320,19 @@ export default async function PropertyDetailsPage({ params }) {
 
                                 {property.updatedAt && (
                                     <div>
-                                        <p className="text-sm text-gray-500">
-                                            🔄 Last Updated
-                                        </p>
+                                        <p className="text-sm text-gray-500">🔄 Last Updated</p>
 
                                         <p className="mt-1 font-medium">
-                                            {new Date(
-                                                property.updatedAt
-                                            ).toLocaleString(
-                                                "en-BD",
-                                                {
-                                                    day: "2-digit",
-                                                    month: "long",
-                                                    year: "numeric",
-                                                    hour: "2-digit",
-                                                    minute: "2-digit",
-                                                }
-                                            )}
+                                            {new Date(property.updatedAt).toLocaleString("en-BD", {
+                                                day: "2-digit",
+                                                month: "long",
+                                                year: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
                                         </p>
                                     </div>
                                 )}
-
                             </div>
                         </div>
                     </div>
@@ -443,7 +342,6 @@ export default async function PropertyDetailsPage({ params }) {
                     ========================= */}
 
                     <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row">
-
                         <Link
                             href={`/dashboard/owner/my-properties/${property._id}/edit`}
                             className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-blue-700"
@@ -451,10 +349,7 @@ export default async function PropertyDetailsPage({ params }) {
                             ✏️ Update Property
                         </Link>
 
-                        <DeletePropertyButton
-                            propertyId={property._id}
-                            ownerId={session.user.id}
-                        />
+                        <DeletePropertyButton propertyId={property._id} ownerId={session.user.id} />
 
                         <Link
                             href="/dashboard/owner/my-properties"
@@ -462,9 +357,7 @@ export default async function PropertyDetailsPage({ params }) {
                         >
                             Back to Properties
                         </Link>
-
                     </div>
-
                 </div>
             </div>
         </div>

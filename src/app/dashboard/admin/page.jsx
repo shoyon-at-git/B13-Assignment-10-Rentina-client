@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import AdminCharts from "@/components/dashboard/admin/admin-charts";
+import AdminCharts from "@/components/dashboard/admin/AdminCharts";
 
 export default async function AdminDashboardPage() {
     const session = await auth.api.getSession({

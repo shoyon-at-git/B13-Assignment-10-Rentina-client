@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { headers } from "next/headers";
-import CancelBookingButton from "@/components/dashboard/tenant/cancel-booking-button";
+import CancelBookingButton from "@/components/dashboard/tenant/CancelBookingButton";
 import { auth } from "@/lib/auth";
 
 export default async function TenantBookingsPage() {

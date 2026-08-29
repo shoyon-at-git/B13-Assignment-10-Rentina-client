@@ -3,7 +3,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import RequestRentButton from "@/components/dashboard/tenant/request-rent-button";
+import RequestRentButton from "@/components/dashboard/tenant/RequestRentButton";
 
 export default async function PropertyDetailsPage({ params }) {
     const session = await auth.api.getSession({

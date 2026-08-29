@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 
-import UserActions from "@/components/dashboard/admin/user-actions";
+import UserActions from "@/components/dashboard/admin/UserActions";
 
 export default function AdminUsersClient({ users }) {
     const [search, setSearch] = useState("");

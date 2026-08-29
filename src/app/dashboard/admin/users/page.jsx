@@ -1,7 +1,7 @@
 
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import AdminUsersClient from "@/components/dashboard/admin/admin-users-client";
+import AdminUsersClient from "@/components/dashboard/admin/AdminUsersClient";
 
 export default async function AdminUsersPage() {
     const session = await auth.api.getSession({

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { headers } from "next/headers";
-import BookingRequestActions from "@/components/dashboard/owner/booking-request-actions";
+import BookingRequestActions from "@/components/dashboard/owner/BookingRequestActions";
 import { auth } from "@/lib/auth";
 
 export default async function BookingRequestsPage() {

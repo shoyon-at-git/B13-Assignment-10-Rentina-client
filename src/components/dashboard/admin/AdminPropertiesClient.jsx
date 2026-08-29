@@ -4,8 +4,8 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import PropertyFilters from "@/components/dashboard/admin/property-filters";
-import PropertyActions from "@/components/dashboard/admin/property-actions";
+import PropertyFilters from "@/components/dashboard/admin/PropertyFilters";
+import PropertyActions from "@/components/dashboard/admin/PropertyActions";
 
 export default function AdminPropertiesClient({
     properties,
